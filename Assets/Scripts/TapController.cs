@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
+//using System.Numerics;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -32,11 +32,11 @@ public class TapController:MonoBehaviour
 
         }
       
-        transform.rotation * Quaternion.lerp(transform.rotation, downRotation, tiltSmooth * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, downRotation, tiltSmooth * Time.deltaTime);
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
-       if(col.gameObject.tag ** "Score Zone")
+       if(col.gameObject.tag == "Score Zone")
         {
             //register a score event
             //play a sound
