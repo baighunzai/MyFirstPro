@@ -6,6 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class TapController:MonoBehaviour
 {
+    public delegate void PlayerDelegate();
+    public static event PlayerDelegate OnplayerDied;
+    public static event PlayerDelegate OnplayerScored;
+
     public float tapforce = 10;
     public float tiltSmooth = 5;
     public Vector3 starpos;
@@ -15,7 +19,7 @@ public class TapController:MonoBehaviour
     Quaternion forwardRotation;
      
     void Start()
-    { 
+    {  
         rigidbody = GetComponent<Rigidbody2D>();
         downRotation = Quaternion.Euler(0, 0, -90);
         forwardRotation = Quaternion.Euler(0, 0, 35);
@@ -38,6 +42,8 @@ public class TapController:MonoBehaviour
     {
        if(col.gameObject.tag == "Score Zone")
         {
+            OnplayerScored();// event sent to game manager
+
             //register a score event
             //play a sound
         }
@@ -46,6 +52,7 @@ public class TapController:MonoBehaviour
             rigidbody.simulated = false;
             //register a dead event
             //play a sound
+            OnplayerDied();//event sent to game manager
         }
 
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+//using static NewBehaviourScript;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,7 +14,9 @@ public class GameManager : MonoBehaviour
     public GameObject StartPage;
     public GameObject GameOverPage;
     public GameObject CountdownPage;
+    //public GameObject CountdownText;
     public Text ScoreText;
+   // public Text CountdownText;
     
         enum PageState { 
         None,
@@ -29,10 +32,45 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
     }
+     void OnEnable()
+    {
+       CountDownText.OnCountdownFinished += OnCountdownFinished; 
+        TapController.OnplayerDied += OnPlayerDied;
+        TapController.OnplayerScored += OnPlayerScored;
 
+    }
+     void OnDisable()
+    { 
+       CountDownText.OnCountdownFinished -= OnCountdownFinished;
+        TapController.OnplayerDied -= OnPlayerDied;
+        TapController.OnplayerScored -= OnPlayerScored;
+
+    }
+    void OnCountdownFinished()
+    {
+        SetPageState(PageState.None);
+        OnGameStarted();
+        score = 0;
+        gameOver = false;
+    }
+    void OnPlayerDied()
+    { 
+        gameOver = true;
+        int savedscore = PlayerPrefs.GetInt("HighScore");
+      if(score > savedscore)
+        {
+            PlayerPrefs.SetInt("HighScore", score);
+        }
+        SetPageState(PageState.GameOver);
+    }
+    void OnPlayerScored()
+    {
+        score++;
+        ScoreText.text = score.ToString();
+    }
     void SetPageState(PageState state)
     {
-        switch (state)
+        switch (state) 
         {
             case PageState.None:
                 StartPage.SetActive(false);

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
 
-public class NewBehaviourScript : MonoBehaviour
+public class CountDownText : MonoBehaviour
 {
     public delegate void CountdownFinished();
     public static event CountdownFinished OnCountdownFinished;
