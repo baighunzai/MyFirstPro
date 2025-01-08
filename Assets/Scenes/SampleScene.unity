@@ -953,7 +953,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &834237798
@@ -1691,6 +1691,7 @@ GameObject:
   - component: {fileID: 1903686679}
   - component: {fileID: 1903686678}
   - component: {fileID: 1903686680}
+  - component: {fileID: 1903686681}
   m_Layer: 0
   m_Name: bird
   m_TagString: Untagged
@@ -1706,8 +1707,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903686676}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: -90.18}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalPosition: {x: -8.2, y: 4.03, z: -90.18}
+  m_LocalScale: {x: 0.3, y: 0.32499, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 566444857}
@@ -1827,6 +1828,21 @@ CircleCollider2D:
   m_Offset: {x: -0.06915867, y: 0}
   serializedVersion: 2
   m_Radius: 2.490842
+--- !u!114 &1903686681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903686676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5365f9b8f07ec34790479d2687ff98a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tapforce: 50
+  tiltSmooth: 5
+  startpos: {x: -8.2, y: 4.03, z: -90.18}
 --- !u!1001 &1280181499987198581
 PrefabInstance:
   m_ObjectHideFlags: 0
