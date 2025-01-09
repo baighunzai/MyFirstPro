@@ -12,6 +12,7 @@ public class Parallaxer : MonoBehaviour
         public bool inUse;
         public PoolObject(Transform t) { transform = t; }
         public void Use() { inUse = false; }
+        public void Dispose() { inUse = false; }
     }
     [System.Serializable]
     public struct YSpawnRange
@@ -31,7 +32,7 @@ public class Parallaxer : MonoBehaviour
     public Vector2 targetAspectRatio;
     float spwanTimer;
     float targetAspect;
-    PoolObject[] PoolObjects;
+    PoolObject[] poolObjects;
     GameManager game;
     void Awake()
     {
@@ -51,23 +52,37 @@ public class Parallaxer : MonoBehaviour
     }
     void OnGameOverConfirmed()
     {
+        for(int i = 0; i<poolObjects.Length; i++)
+        {
+            poolObjects[i].Dispose();
+            poolObjects[i].transform.position = Vector3.one;
+        }
         configure();
     }
     void Update()
     {
+        if (game.GameOver) return;
 
+        Shift();
+        spwanTimer += Time.deltaTime;
+        if (spwanTimer > spwanRate)
+        {
+            Spawn();
+            spwanTimer = 0;
+        }
     }
     void configure()
     {
         targetAspect = targetAspectRatio.x / targetAspectRatio.y;
-        PoolObjects = new PoolObject[PoolSize];
-        for (int i = 0; i < PoolObjects.Length; i++)
+        poolObjects = new PoolObject[PoolSize];
+        for (int i = 0; i < poolObjects.Length; i++)
         {
             GameObject go = Instantiate(Prefab) as GameObject;
+            go.SetActive(true);
             Transform t = go.transform;
             t.SetParent(transform);
-            t.position = Vector3.one * 1000;
-            PoolObjects[i] = new PoolObject(t);
+            t.position = Vector3.one;
+            poolObjects[i] = new PoolObject(t);
         }
         if (spawnImmedite)
         {
@@ -85,14 +100,20 @@ public class Parallaxer : MonoBehaviour
     }
     void SpawnImmediate()
     {
-
+        Transform t = GetPoolObject();
+        if (t == null) return;
+        Vector3 pos = Vector3.zero;
+        pos.x = immediateSpawanPos.x;
+        pos.y = Random.Range(ySpawnRange.min, ySpawnRange.max);
+        t.position = pos;
+        Spawn();
     }
     void Shift()
     {
-        for (int i = 0; i < PoolObject.Length; i++)
+        for (int i = 0; i < poolObjects.Length; i++)
         {
-            PoolObjects[i].transform.position += -Vector3.right * shiftspeed * Time.deltaTime;
-            CheckDisposeObject(PoolObjects[i]);
+            poolObjects[i].transform.position += -Vector3.right * shiftspeed * Time.deltaTime;
+            CheckDisposeObject(poolObjects[i]);
         }
 
     }
@@ -100,20 +121,19 @@ public class Parallaxer : MonoBehaviour
     {
         if (poolObject.transform.position.x < -defaultSpawnPos.x)
             poolObject.Dispose();
-        poolObject.transform.position = Vector3.one * 1000;
+        poolObject.transform.position = Vector3.one;
 
     }
     Transform GetPoolObject()
     {
-        for (int i = 0; i < PoolObjects.Length; i++)
+        for (int i = 0; i < poolObjects.Length; i++)
         {
-            if (!PoolObjects[i].inUse)
+            if (!poolObjects[i].inUse)
             {
-                PoolObjects[i].Use();
-                {
-                    return PoolObjects[i];
-                }
+                poolObjects[i].Use();
+                return poolObjects[i].transform;
             }
         }
+        return null;
     }
 }
